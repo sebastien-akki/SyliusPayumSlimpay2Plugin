@@ -1,5 +1,5 @@
 akki:
-    sylius_payum_slimpay_plugin:
+    slimpay:
         app_id:
             not_blank: Entrez l'identifiant de l'application.
         app_secret:

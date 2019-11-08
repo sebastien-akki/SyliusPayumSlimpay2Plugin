@@ -22,44 +22,44 @@ final class SlimpayGatewayConfigurationType extends AbstractType
     {
         $builder
             ->add('app_id', TextType::class, [
-                'label' => 'akki.sylius_payum_slimpay_plugin.app_id',
+                'label' => 'akki.slimpay.app_id',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'akki.sylius_payum_slimpay_plugin.app_id.not_blank',
+                        'message' => 'akki.slimpay.app_id.not_blank',
                         'groups' => ['sylius']
                     ])
                 ],
             ])
             ->add('app_secret', TextType::class, [
-                'label' => 'akki.sylius_payum_slimpay_plugin.app_secret',
+                'label' => 'akki.slimpay.app_secret',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'akki.sylius_payum_slimpay_plugin.app_secret.not_blank',
+                        'message' => 'akki.slimpay.app_secret.not_blank',
                         'groups' => ['sylius']
                     ])
                 ],
             ])
             ->add('creditor_reference', TextType::class, [
-                'label' => 'akki.sylius_payum_slimpay_plugin.creditor_reference',
+                'label' => 'akki.slimpay.creditor_reference',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'akki.sylius_payum_slimpay_plugin.creditor_reference.not_blank',
+                        'message' => 'akki.slimpay.creditor_reference.not_blank',
                         'groups' => ['sylius']
                     ])
                 ],
             ])
             ->add('sandbox', ChoiceType::class, [
-                'label' => 'akki.sylius_payum_slimpay_plugin.sandbox',
+                'label' => 'akki.slimpay.sandbox',
                 'choices' => [
-                    'akki.sylius_payum_slimpay_plugin.no' => false,
-                    'akki.sylius_payum_slimpay_plugin.yes' => true
+                    'akki.slimpay.no' => false,
+                    'akki.slimpay.yes' => true
                 ],
             ])
             ->add('default_checkout_mode', TextType::class, [
-                'label' => 'akki.sylius_payum_slimpay_plugin.default_checkout_mode',
+                'label' => 'akki.slimpay.default_checkout_mode',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'akki.sylius_payum_slimpay_plugin.default_checkout_mode.not_blank',
+                        'message' => 'akki.slimpay.default_checkout_mode.not_blank',
                         'groups' => ['sylius']
                     ])
                 ],

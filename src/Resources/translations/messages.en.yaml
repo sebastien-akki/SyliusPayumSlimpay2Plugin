@@ -1,5 +1,5 @@
 akki:
-    sylius_payum_slimpay_plugin:
+    slimpay:
         app_id: traduction_missing
         app_secret: traduction_missing
         creditor_reference: traduction_missing

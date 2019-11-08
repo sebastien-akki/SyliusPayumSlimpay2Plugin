@@ -1,5 +1,5 @@
 akki:
-    sylius_payum_slimpay_plugin:
+    slimpay:
         app_id:
             not_blank: traduction_missing
         app_secret:

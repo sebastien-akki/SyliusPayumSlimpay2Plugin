@@ -1,5 +1,5 @@
 akki:
-    sylius_payum_slimpay_plugin:
+    slimpay:
         app_id: ID Application
         app_secret: Clé secrète Application
         creditor_reference: Reference créditeur
