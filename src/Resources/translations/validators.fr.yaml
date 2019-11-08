@@ -1,0 +1,12 @@
+akki:
+    sylius_payum_slimpay_plugin:
+        app_id:
+            not_blank: Entrez l'identifiant de l'application.
+        app_secret:
+            not_blank: Veuillez entrer la clé secrète de l'application.
+        creditor_reference:
+            not_blank: Veuillez entrer la référence créditeur.
+        channel:
+            currency: La seule devise autorisée est EUR.
+        default_checkout_mode:
+            not_blank: Veuillez entrer le mode de checkout

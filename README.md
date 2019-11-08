@@ -1,1 +1,1 @@
-# SyliusPayumSlimpay2Plugin
+# Sylius Payum Slimpay

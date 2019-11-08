@@ -1,0 +1,10 @@
+akki:
+    sylius_payum_slimpay_plugin:
+        app_id: traduction_missing
+        app_secret: traduction_missing
+        creditor_reference: traduction_missing
+        gateway_label: traduction_missing
+        prod: traduction_missing
+        no: traduction_missing
+        yes: traduction_missing
+        default_checkout_mode: traduction_missing

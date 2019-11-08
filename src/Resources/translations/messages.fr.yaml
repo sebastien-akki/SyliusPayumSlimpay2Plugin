@@ -1,0 +1,10 @@
+akki:
+    sylius_payum_slimpay_plugin:
+        app_id: ID Application
+        app_secret: Clé secrète Application
+        creditor_reference: Reference créditeur
+        gateway_label: Sylius Payum Slimpay Payment
+        sandbox: SandBox
+        no: Non
+        yes: Oui
+        default_checkout_mode: Checkout mode

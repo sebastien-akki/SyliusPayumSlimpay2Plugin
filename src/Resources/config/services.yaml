@@ -1,0 +1,19 @@
+services:
+
+    akki.slimpay.form.type.gateway_configuration:
+        class: Akki\SyliusPayumSlimpayPlugin\Form\Type\SlimpayGatewayConfigurationType
+        tags:
+            - { name: sylius.gateway_configuration_type, type: slimpay, label: akki.slimpay.gateway_label }
+            - { name: form.type }
+
+    akki.slimpay.gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [Payum\Slimpay\SlimpayGatewayFactory]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: slimpay }
+
+    akki.slimpay.action.convert_payment_preprend:
+        public: true
+        class: Akki\SyliusPayumSlimpayPlugin\Action\SyliusConvertAction
+        tags:
+            - { name: payum.action, factory: slimpay, alias: sylius.slimpay.convert_payment_preprend, prepend: true }
