@@ -46,7 +46,13 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['payment_scheme'] = Constants::PAYMENT_SCHEME_SEPA_DIRECT_DEBIT_CORE;
         }
 
+        $model['amount'] = $payment->getAmount()/100;
+        $model['currency'] = $payment->getCurrencyCode();
 
+        $order = $payment->getOrder();
+        if (null !== $customer = $order->getCustomer()) {
+            $model['subscriber_reference'] = $customer->getId();
+        }
 
         $request->setResult((array)$model);
     }
@@ -82,6 +88,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $comment .= ", Customer: {$customer->getId()}";
         }
         $model['comment'] = $comment;
+        $model['label'] = $comment;
     }
 
 }
