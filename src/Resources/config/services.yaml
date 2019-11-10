@@ -11,3 +11,10 @@ services:
         arguments: [Payum\Slimpay\SlimpayGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: slimpay }
+
+    #PayumActions for Sylius
+    akki.slimpay.action.convert_payment_preprend:
+        public: true
+        class: Akki\SyliusPayumSlimpayPlugin\Action\SyliusConvertAction
+        tags:
+            - { name: payum.action, factory: slimpay, alias: akki.slimpay.convert_payment_preprend, prepend: true }
