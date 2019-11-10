@@ -64,6 +64,10 @@ final class SlimpayGatewayConfigurationType extends AbstractType
                     ])
                 ],
             ])
+            // Enable the use of authorize. This can also be a normal select field if the gateway supports both.
+            ->add('use_authorize', HiddenType::class, [
+                'data' => 1,
+            ])
         ;
     }
 }
