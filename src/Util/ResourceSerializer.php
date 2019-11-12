@@ -2,6 +2,7 @@
 
 namespace Akki\SyliusPayumSlimpayPlugin\Util;
 
+use Exception;
 use HapiClient\Hal\Link;
 use HapiClient\Hal\Resource;
 
@@ -50,6 +51,7 @@ class ResourceSerializer
      * @param string $json
      *
      * @return Resource
+     * @throws Exception
      */
     public static function unserializeResource($json)
     {

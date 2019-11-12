@@ -3,6 +3,8 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Config;
 
 
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
+
 class Config
 {
     /**

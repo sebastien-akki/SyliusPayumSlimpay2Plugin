@@ -3,6 +3,7 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\UpdatePaymentMethodWithIban;
@@ -23,9 +24,13 @@ class UpdatePaymentMethodWithIbanAction extends BaseApiAwareAction
 
         $model->validateNotEmpty(['iban', 'mandate_reference']);
 
-        $model['bank_account'] = ResourceSerializer::serializeResource(
-            $this->api->updatePaymentMethodWithIban($model['mandate_reference'], $model['iban'])
-        );
+        try {
+            $model['bank_account'] = ResourceSerializer::serializeResource(
+                $this->api->updatePaymentMethodWithIban($model['mandate_reference'], $model['iban'])
+            );
+        } catch (Exception $e) {
+            $this->populateDetailsWithError($model, $e, $request);
+        }
     }
 
     /**

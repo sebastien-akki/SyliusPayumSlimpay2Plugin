@@ -3,6 +3,7 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncOrder;
@@ -23,11 +24,15 @@ class SyncOrderAction extends BaseApiAwareAction
 
         $model->validateNotEmpty(['order']);
 
-        $order = ResourceSerializer::unserializeResource($model['order']);
+        try {
+            $order = ResourceSerializer::unserializeResource($model['order']);
 
-        $model['order'] = ResourceSerializer::serializeResource(
-            $this->api->getOrder($order->getState()['id'])
-        );
+            $model['order'] = ResourceSerializer::serializeResource(
+                $this->api->getOrder($order->getState()['id'])
+            );
+        } catch (Exception $e) {
+            $this->populateDetailsWithError($model, $e, $request);
+        }
     }
 
     /**

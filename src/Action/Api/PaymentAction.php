@@ -4,6 +4,7 @@ namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\Payment;
@@ -24,16 +25,20 @@ class PaymentAction  extends BaseApiAwareAction
 
         $model->validateNotEmpty(['amount', 'currency', 'payment_scheme', 'payment_reference']);
 
-        $model['payment'] = ResourceSerializer::serializeResource(
-            $this->api->createPayment($model['payment_scheme'], $model['payment_reference'], [
-                'reference' => $model['reference'],
-                'amount' => $model['amount'],
-                'currency' =>  $model['currency'],
-                'scheme' => $model['payment_scheme'],
-                'label' => $model['label'],
-                'executionDate' => $model['execution_date']
-            ])
-        );
+        try {
+            $model['payment'] = ResourceSerializer::serializeResource(
+                $this->api->createPayment($model['payment_scheme'], $model['payment_reference'], [
+                    'reference' => $model['reference'],
+                    'amount' => $model['amount'],
+                    'currency' =>  $model['currency'],
+                    'scheme' => $model['payment_scheme'],
+                    'label' => $model['label'],
+                    'executionDate' => $model['execution_date']
+                ])
+            );
+        } catch (Exception $e) {
+            $this->populateDetailsWithError($model, $e, $request);
+        }
     }
 
     /**

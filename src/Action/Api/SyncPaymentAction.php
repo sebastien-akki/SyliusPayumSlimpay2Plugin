@@ -3,6 +3,7 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncPayment;
@@ -23,11 +24,15 @@ class SyncPaymentAction extends BaseApiAwareAction
 
         $model->validateNotEmpty(['payment']);
 
-        $payment = ResourceSerializer::unserializeResource($model['payment']);
+        try {
+            $payment = ResourceSerializer::unserializeResource($model['payment']);
 
-        $model['payment'] = ResourceSerializer::serializeResource(
-            $this->api->getPayment($payment->getState()['id'])
-        );
+            $model['payment'] = ResourceSerializer::serializeResource(
+                $this->api->getPayment($payment->getState()['id'])
+            );
+        } catch (Exception $e) {
+            $this->populateDetailsWithError($model, $e, $request);
+        }
     }
 
     /**
