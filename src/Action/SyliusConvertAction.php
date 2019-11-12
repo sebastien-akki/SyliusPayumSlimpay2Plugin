@@ -2,6 +2,7 @@
 
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
+use Payum\Core\Model\GatewayConfigInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -9,8 +10,8 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Convert;
-use Payum\Core\Request\GetCurrency;
 use Payum\Slimpay\Constants;
+use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 /**
  * Class SyliusConvertAction
@@ -61,6 +62,15 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['zip'] = $address->getPostcode();
             $model['country'] = $address->getCountryCode();
         }
+
+        /** @var PaymentMethodInterface $payment_method */
+        $payment_method = $payment->getMethod();
+
+        /** @var GatewayConfigInterface $gatewayConfig */
+        $gatewayConfig = $payment_method->getGatewayConfig();
+
+        /** @var array $config */
+        $config = $gatewayConfig->getConfig();
 
         $request->setResult((array)$model);
     }
