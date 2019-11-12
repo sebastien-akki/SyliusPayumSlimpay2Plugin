@@ -1,5 +1,5 @@
 <?php
-namespace Akki\SyliusPayumSlimpayPlugin;
+namespace Akki\SyliusPayumSlimpayPlugin\GatewayFactory;
 
 use Akki\SyliusPayumSlimpayPlugin\Action\Api\CheckoutIframeAction;
 use Akki\SyliusPayumSlimpayPlugin\Action\Api\CheckoutRedirectAction;
@@ -28,7 +28,7 @@ use Payum\Core\GatewayFactoryInterface;
 
 /**
  * Class SlimpayGatewayFactory
- * @package Akki\SyliusPayumSlimpayPlugin
+ * @package Akki\SyliusPayumSlimpayPlugin\GatewayFactory
  */
 class SlimpayGatewayFactory extends GatewayFactory
 {

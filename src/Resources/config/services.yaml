@@ -8,7 +8,7 @@ services:
 
     akki.slimpay.gateway_factory:
         class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
-        arguments: [Akki\SyliusPayumSlimpayPlugin\SlimpayGatewayFactory]
+        arguments: [Akki\SyliusPayumSlimpayPlugin\GatewayFactory\SlimpayGatewayFactory]
         tags:
             - { name: payum.gateway_factory_builder, factory: slimpay }
 
