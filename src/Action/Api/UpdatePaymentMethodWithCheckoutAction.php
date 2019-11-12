@@ -6,7 +6,7 @@ namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 use ArrayAccess;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Akki\SyliusPayumSlimpayPlugin\Constants;
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\CheckoutIframe;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\CheckoutRedirect;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\UpdatePaymentMethodWithCheckout;

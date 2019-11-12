@@ -8,7 +8,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Akki\SyliusPayumSlimpayPlugin\Constants;
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\SetUpCardAlias;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\SignMandate;
 

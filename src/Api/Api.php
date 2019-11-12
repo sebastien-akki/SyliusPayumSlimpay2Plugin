@@ -1,5 +1,5 @@
 <?php
-namespace Akki\SyliusPayumSlimpayPlugin;
+namespace Akki\SyliusPayumSlimpayPlugin\Api;
 
 use HapiClient\Hal\Resource;
 use HapiClient\Http\Follow;

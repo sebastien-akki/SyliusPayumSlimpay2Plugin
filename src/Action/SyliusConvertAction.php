@@ -10,7 +10,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Convert;
-use Akki\SyliusPayumSlimpayPlugin\Constants;
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 /**

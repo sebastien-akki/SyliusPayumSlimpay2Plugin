@@ -8,7 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\HttpRedirect;
-use Akki\SyliusPayumSlimpayPlugin\Constants;
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Akki\SyliusPayumSlimpayPlugin\Request\Api\CheckoutRedirect;
 use Akki\SyliusPayumSlimpayPlugin\Util\ResourceSerializer;
 

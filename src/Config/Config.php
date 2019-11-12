@@ -1,6 +1,6 @@
 <?php
 
-namespace Akki\SyliusPayumSlimpayPlugin;
+namespace Akki\SyliusPayumSlimpayPlugin\Config;
 
 
 class Config
