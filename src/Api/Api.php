@@ -1,6 +1,7 @@
 <?php
 namespace Akki\SyliusPayumSlimpayPlugin\Api;
 
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use HapiClient\Hal\Resource;
 use HapiClient\Http\Follow;
 use HapiClient\Http\JsonBody;
