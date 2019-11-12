@@ -2,6 +2,7 @@
 
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
+use Payum\Core\Model\GatewayConfigInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -10,6 +11,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Convert;
 use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
+use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 /**
  * Class SyliusConvertAction

@@ -3,7 +3,6 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
-use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -34,20 +33,16 @@ class RefundAction extends BaseApiAwareAction
             ));
         }
 
-        try {
-            $model['payment'] = ResourceSerializer::serializeResource(
-                $this->api->refundPayment($model['payment_scheme'], $model['mandate_reference'], [
-                    'reference' => $model['reference'],
-                    'amount' => $model['amount'],
-                    'currency' => $model['currency'],
-                    'scheme' => $model['payment_scheme'],
-                    'label' => $model['label'],
-                    'executionDate' => $model['execution_date']
-                ])
-            );
-        } catch (Exception $e) {
-            $this->populateDetailsWithError($model, $e, $request);
-        }
+        $model['payment'] = ResourceSerializer::serializeResource(
+            $this->api->refundPayment($model['payment_scheme'], $model['mandate_reference'], [
+                'reference' => $model['reference'],
+                'amount' => $model['amount'],
+                'currency' => $model['currency'],
+                'scheme' => $model['payment_scheme'],
+                'label' => $model['label'],
+                'executionDate' => $model['execution_date']
+            ])
+        );
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 
 use ArrayAccess;
-use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -27,25 +26,21 @@ class GetOrderPaymentReferenceAction  extends BaseApiAwareAction
 
         $model->validateNotEmpty(['order']);
 
-        try {
-            $order = ResourceSerializer::unserializeResource($model['order']);
+        $order = ResourceSerializer::unserializeResource($model['order']);
 
-            if(Constants::ORDER_STATE_COMPLETE != $order->getState()['state']) {
-                throw new LogicException('Cannot get payment reference for not completed orders.');
-            }
-
-            if (Constants::PAYMENT_SCHEME_CARD == $order->getState()['paymentScheme']) {
-                $follow = Constants::FOLLOW_GET_CARD_ALIAS;
-            } else {
-                $follow = Constants::FOLLOW_GET_MANDATE;
-            }
-
-            $model['reference'] = ResourceSerializer::serializeResource(
-                $this->api->getOrderPaymentReference($order, $follow)
-            );
-        } catch (Exception $e) {
-            $this->populateDetailsWithError($model, $e, $request);
+        if(Constants::ORDER_STATE_COMPLETE != $order->getState()['state']) {
+            throw new LogicException('Cannot get payment reference for not completed orders.');
         }
+
+        if (Constants::PAYMENT_SCHEME_CARD == $order->getState()['paymentScheme']) {
+            $follow = Constants::FOLLOW_GET_CARD_ALIAS;
+        } else {
+            $follow = Constants::FOLLOW_GET_MANDATE;
+        }
+
+        $model['reference'] = ResourceSerializer::serializeResource(
+            $this->api->getOrderPaymentReference($order, $follow)
+        );
     }
 
     /**

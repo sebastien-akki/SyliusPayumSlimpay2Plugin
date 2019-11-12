@@ -3,9 +3,6 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
-use Exception;
-use HapiClient\Exception\LinkNotUniqueException;
-use HapiClient\Exception\RelNotFoundException;
 use HapiClient\Hal\Resource;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
@@ -21,8 +18,6 @@ class CheckoutRedirectAction extends BaseApiAwareAction
      * {@inheritDoc}
      *
      * @param CheckoutRedirect $request
-     * @throws LinkNotUniqueException
-     * @throws RelNotFoundException
      */
     public function execute($request)
     {
@@ -30,20 +25,15 @@ class CheckoutRedirectAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        try {
-            $order = ResourceSerializer::unserializeResource($model['order']);
-            if (! $order instanceof Resource) {
-                throw new LogicException('Order should be an instance of Resource');
-            }
-
-            if (Constants::CHECKOUT_MODE_REDIRECT != $model['checkout_mode']) {
-                throw new LogicException(sprintf('Redirect is not available for mode %s', $model['checkout_mode']));
-            }
-
-            throw new HttpRedirect($this->api->getCheckoutRedirect($order));
-        } catch (Exception $e) {
-            $this->populateDetailsWithError($model, $e, $request);
+        $order = ResourceSerializer::unserializeResource($model['order']);
+        if (! $order instanceof Resource) {
+            throw new LogicException('Order should be an instance of Resource');
         }
+        if (Constants::CHECKOUT_MODE_REDIRECT != $model['checkout_mode']) {
+            throw new LogicException(sprintf('Redirect is not available for mode %s', $model['checkout_mode']));
+        }
+
+        throw new HttpRedirect($this->api->getCheckoutRedirect($order));
     }
 
     /**
