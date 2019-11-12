@@ -19,13 +19,32 @@ use Akki\SyliusPayumSlimpayPlugin\Action\NotifyAction;
 use Akki\SyliusPayumSlimpayPlugin\Action\OrderStatusAction;
 use \Akki\SyliusPayumSlimpayPlugin\Action\Api\RefundAction as ApiRefundAction;
 use Akki\SyliusPayumSlimpayPlugin\Action\PaymentStatusAction;
+use Akki\SyliusPayumSlimpayPlugin\Api\Api;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use Akki\SyliusPayumSlimpayPlugin\Action\SyncAction;
 use Akki\SyliusPayumSlimpayPlugin\Action\Api\NotifyAction as ApiNotifyAction;
+use Payum\Core\GatewayFactoryInterface;
 
+/**
+ * Class SlimpayGatewayFactory
+ * @package Akki\SyliusPayumSlimpayPlugin
+ */
 class SlimpayGatewayFactory extends GatewayFactory
 {
+    /**
+     * Builds a new factory.
+     *
+     * @param array                   $defaultConfig
+     * @param GatewayFactoryInterface $coreGatewayFactory
+     *
+     * @return SlimpayGatewayFactory
+     */
+    public static function build(array $defaultConfig, GatewayFactoryInterface $coreGatewayFactory = null)
+    {
+        return new static($defaultConfig, $coreGatewayFactory);
+    }
+
     /**
      * {@inheritDoc}
      */
