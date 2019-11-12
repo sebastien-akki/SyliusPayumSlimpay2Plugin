@@ -63,14 +63,9 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['country'] = $address->getCountryCode();
         }
 
-        /** @var PaymentMethodInterface $payment_method */
-        $payment_method = $payment->getMethod();
-
-        /** @var GatewayConfigInterface $gatewayConfig */
-        $gatewayConfig = $payment_method->getGatewayConfig();
-
-        /** @var array $config */
-        $config = $gatewayConfig->getConfig();
+        if ($request->getToken()) {
+            $model['return_url'] = $request->getToken()->getTargetUrl();
+        }
 
         $request->setResult((array)$model);
     }

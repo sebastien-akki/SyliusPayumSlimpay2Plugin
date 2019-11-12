@@ -63,12 +63,13 @@ class Api
      *
      * @return Resource
      */
-    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields)
+    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl)
     {
         $fields = [
             'started' => true,
             'locale' => null,
             'paymentScheme' => $paymentSchema,
+            'returnUrl' => $returnUrl,
             'creditor' => [
                 'reference' => $this->options['creditor_reference']
             ],

@@ -50,7 +50,9 @@ class SignMandateAction extends BaseApiAwareAction
         $model->validateNotEmpty(['checkout_mode']);
 
         $model['order'] = ResourceSerializer::serializeResource(
-            $this->api->signMandate($model['subscriber_reference'], $model['payment_scheme'], [
+            $this->api->signMandate($model['subscriber_reference'],
+            $model['payment_scheme'],
+            [
                 'givenName' => $model['first_name'],
                 'familyName' => $model['last_name'],
                 'email' => $model['email'],
@@ -64,7 +66,8 @@ class SignMandateAction extends BaseApiAwareAction
                     'postalCode' => $model['zip'],
                     'country' => $model['country']
                 ]
-            ])
+            ],
+                $model['return_url'])
         );
 
         if(Constants::CHECKOUT_MODE_REDIRECT == $model['checkout_mode']) {
