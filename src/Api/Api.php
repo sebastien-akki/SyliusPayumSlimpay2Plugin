@@ -2,10 +2,12 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Api;
 
 use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
+use Exception;
 use HapiClient\Hal\Resource;
 use HapiClient\Http\Follow;
 use HapiClient\Http\JsonBody;
 use Http\Message\MessageFactory;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\HttpClientInterface;
 use HapiClient\Http\HapiClient;
 use HapiClient\Http\Auth\Oauth2BasicAuthentication;
@@ -38,7 +40,7 @@ class Api
      * @param HttpClientInterface $client
      * @param MessageFactory      $messageFactory
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
+     * @throws InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
@@ -62,7 +64,9 @@ class Api
      * @param string $paymentSchema
      * @param array $mandateFields
      *
+     * @param string $returnUrl
      * @return Resource
+     * @throws Exception
      */
     public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl)
     {
@@ -297,6 +301,7 @@ class Api
      * @param array|null $urlVariables
      *
      * @return Resource
+     * @throws Exception
      */
     protected function doRequest(
         $method,

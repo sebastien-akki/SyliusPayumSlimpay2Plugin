@@ -3,6 +3,7 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -18,6 +19,7 @@ class SignMandateAction extends BaseApiAwareAction
      * {@inheritDoc}
      *
      * @param SignMandate $request
+     * @throws Exception
      */
     public function execute($request)
     {

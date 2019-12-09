@@ -67,10 +67,19 @@ class OrderStatusAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetOrderHumanStatus &&
-            $request->getModel() instanceof ArrayAccess
-            ;
+        if (false == (
+                $request instanceof GetOrderHumanStatus &&
+                $request->getModel() instanceof ArrayAccess
+            )) {
+            return false;
+        }
+
+        $model = ArrayObject::ensureArrayObject($request->getModel());
+        if ($model['order']) {
+            return true;
+        }
+
+        return false;
     }
 
 }
