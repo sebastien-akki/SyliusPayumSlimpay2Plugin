@@ -1,0 +1,4 @@
+km_sylius_payum_slimpay_notify:
+  path: /slimpay/notify
+  defaults:
+    _controller: Akki\SyliusPayumSlimpayPlugin\Controller\NotifyController::doAction

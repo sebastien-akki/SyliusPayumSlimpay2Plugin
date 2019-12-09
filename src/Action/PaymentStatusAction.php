@@ -54,18 +54,9 @@ class PaymentStatusAction implements ActionInterface, GatewayAwareInterface
      */
     public function supports($request)
     {
-        if (false == (
-                $request instanceof GetStatusInterface &&
-                $request->getModel() instanceof ArrayAccess
-            )) {
-            return false;
-        }
-
-        $model = ArrayObject::ensureArrayObject($request->getModel());
-        if ($model['payment']) {
-            return true;
-        }
-
-        return false;
+        return
+            $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
+        ;
     }
 }

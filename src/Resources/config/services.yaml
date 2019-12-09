@@ -18,3 +18,8 @@ services:
         class: Akki\SyliusPayumSlimpayPlugin\Action\SyliusConvertAction
         tags:
             - { name: payum.action, factory: slimpay, alias: akki.slimpay.convert_payment_preprend, prepend: true }
+
+    #Slimpay notify
+    Akki\SyliusPayumSlimpayPlugin\Controller\NotifyController:
+        public: true
+        class: Akki\SyliusPayumSlimpayPlugin\Controller\NotifyController
