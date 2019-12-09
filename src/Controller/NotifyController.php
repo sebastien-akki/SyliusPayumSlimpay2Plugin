@@ -27,20 +27,27 @@ class NotifyController extends PayumController
         $handleRequest = fopen("request.txt", "w");
         fwrite ($handleRequest, print_r($request,true) );
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $body = file_get_contents('php://input');
+        $body = json_decode($body, true);
+        $orderReference = $body["reference"];
 
-        $handleModel= fopen("request.txt", "w");
-        fwrite ($handleModel, print_r($model,true) );
+        $handleRequest = fopen("body.txt", "w");
+        fwrite ($handleRequest, print_r($body,true) );
 
-        $model->validateNotEmpty(['order']);
+        // $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $order = ResourceSerializer::unserializeResource($model['order']);
+        // $handleModel= fopen("model.txt", "w");
+        // fwrite ($handleModel, print_r($model,true) );
 
-        $handleOder= fopen("request.txt", "w");
-        fwrite ($handleOder, print_r($order,true) );
+        // $model->validateNotEmpty(['order']);
 
-        $payment_reference = $order['payment_reference'];
-        $comment = $order['comment'];
+        // $order = ResourceSerializer::unserializeResource($model['order']);
+
+        // $handleOder= fopen("order.txt", "w");
+        // fwrite ($handleOder, print_r($order,true) );
+
+        $payment_reference = ''; // $order['payment_reference'];
+        $comment = ''; // $order['comment'];
 
         // Find your payment entity
         try {
