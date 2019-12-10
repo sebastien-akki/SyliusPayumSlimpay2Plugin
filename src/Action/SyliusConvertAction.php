@@ -2,7 +2,8 @@
 
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
-use Payum\Core\Model\GatewayConfigInterface;
+use DateTime;
+use Exception;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -11,7 +12,6 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Convert;
 use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
-use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 /**
  * Class SyliusConvertAction
@@ -25,6 +25,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
      * {@inheritDoc}
      *
      * @param Convert $request
+     * @throws Exception
      */
     public function execute($request)
     {
@@ -34,6 +35,8 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
         $payment = $request->getSource();
 
         $model = ArrayObject::ensureArrayObject($payment->getDetails());
+
+        $model['type_paiement'] = 'mandat';
 
         if (false == $model['payment_reference']) {
             $this->setReference($model, $payment);
@@ -63,10 +66,6 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['country'] = $address->getCountryCode();
         }
 
-        if ($request->getToken()) {
-            $model['return_url'] = $request->getToken()->getTargetUrl();
-        }
-
         $request->setResult((array)$model);
     }
 
@@ -83,10 +82,13 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param ArrayObject $model
      * @param PaymentInterface $payment
+     * @throws Exception
      */
     protected function setReference(ArrayObject $model, PaymentInterface $payment): void
     {
+        $dateNow = new Datetime("now");
         $model['payment_reference'] = $payment->getId();
+        $model['mandate_reference'] = "{$payment->getId()}_{$dateNow->format('Y_m_d_H_i_s')}";
     }
 
     /**

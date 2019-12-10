@@ -1,6 +1,9 @@
 <?php
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
+use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\SetUpCardAlias;
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\SignMandate;
 use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -25,9 +28,24 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(['amount', 'currency', 'payment_scheme', 'payment_reference']);
+        if ($request->getToken()) {
+            $model['return_url'] = $request->getToken()->getAfterUrl();
+        }
 
-        $this->gateway->execute(new Payment($model));
+        if ($model['type_paiement'] !== 'mandat'){
+            $model->validateNotEmpty(['amount', 'currency', 'payment_scheme', 'payment_reference']);
+
+            $this->gateway->execute(new Payment($model));
+        }else {
+            $model->validateNotEmpty(['payment_scheme']);
+
+            if(Constants::PAYMENT_SCHEME_CARD == $model['payment_scheme']) {
+                $this->gateway->execute(new SetUpCardAlias($model));
+            } else {
+                $this->gateway->execute(new SignMandate($model));
+            }
+        }
+
     }
 
     /**

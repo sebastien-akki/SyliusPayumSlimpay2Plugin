@@ -3,6 +3,7 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
 use ArrayAccess;
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -21,6 +22,7 @@ class OrderStatusAction implements ActionInterface, GatewayAwareInterface
      * {@inheritDoc}
      *
      * @param GetOrderHumanStatus $request
+     * @throws Exception
      */
     public function execute($request)
     {

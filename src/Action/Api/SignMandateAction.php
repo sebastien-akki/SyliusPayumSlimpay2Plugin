@@ -69,7 +69,8 @@ class SignMandateAction extends BaseApiAwareAction
                     'country' => $model['country']
                 ]
             ],
-                $model['return_url'])
+                $model['return_url'],
+                $model['mandate_reference'])
         );
 
         if(Constants::CHECKOUT_MODE_REDIRECT == $model['checkout_mode']) {

@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Akki\SyliusPayumSlimpayPlugin\Form\Type;
 
-use Akki\SyliusPayumSlimpayPlugin\Legacy\Slimpay;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class SlimpayGatewayConfigurationType extends AbstractType
@@ -64,10 +60,6 @@ final class SlimpayGatewayConfigurationType extends AbstractType
                         'groups' => ['sylius']
                     ])
                 ],
-            ])
-            // Enable the use of authorize. This can also be a normal select field if the gateway supports both.
-            ->add('use_authorize', HiddenType::class, [
-                'data' => 1,
             ])
         ;
     }

@@ -17,6 +17,7 @@ class GetOrderPaymentReferenceAction  extends BaseApiAwareAction
      * {@inheritDoc}
      *
      * @param GetOrderPaymentReference $request
+     * @throws \Exception
      */
     public function execute($request)
     {
@@ -34,13 +35,19 @@ class GetOrderPaymentReferenceAction  extends BaseApiAwareAction
 
         if (Constants::PAYMENT_SCHEME_CARD == $order->getState()['paymentScheme']) {
             $follow = Constants::FOLLOW_GET_CARD_ALIAS;
+            $follow2 = null;
         } else {
             $follow = Constants::FOLLOW_GET_MANDATE;
+            $follow2 = Constants::FOLLOW_GET_BANK_ACCOUNT;
         }
 
-        $model['reference'] = ResourceSerializer::serializeResource(
-            $this->api->getOrderPaymentReference($order, $follow)
-        );
+        $mandate = $this->api->getOrderPaymentReference($order, $follow);
+        $model['reference'] = ResourceSerializer::serializeResource($mandate);
+
+        if ($follow2 !== null) {
+            $bankAccount = $this->api->getOrderBankAccount($mandate, $follow2);
+            $model['bank_account'] = ResourceSerializer::serializeResource($bankAccount);
+        }
     }
 
     /**

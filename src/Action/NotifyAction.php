@@ -2,14 +2,15 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
 use ArrayAccess;
-use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 
-class NotifyAction implements ActionInterface
+class NotifyAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
@@ -22,9 +23,9 @@ class NotifyAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new LogicException('Not implemented');
+        $this->gateway->execute(new Sync($details));
     }
 
     /**

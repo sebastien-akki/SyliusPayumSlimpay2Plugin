@@ -3,6 +3,8 @@ namespace Akki\SyliusPayumSlimpayPlugin\Api;
 
 use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Exception;
+use HapiClient\Exception\LinkNotUniqueException;
+use HapiClient\Exception\RelNotFoundException;
 use HapiClient\Hal\Resource;
 use HapiClient\Http\Follow;
 use HapiClient\Http\JsonBody;
@@ -65,10 +67,11 @@ class Api
      * @param array $mandateFields
      *
      * @param string $returnUrl
+     * @param string $mandateReference
      * @return Resource
      * @throws Exception
      */
-    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl)
+    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $mandateReference)
     {
         $fields = [
             'started' => true,
@@ -86,7 +89,7 @@ class Api
                     'type' => Constants::ITEM_TYPE_SIGN_MANDATE,
                     'action' => Constants::ITEM_ACTION_SIGN,
                     'mandate' => [
-                        'reference' => null,
+                        'reference' => $mandateReference,
                         'signatory' => $mandateFields
                     ]
                 ]
@@ -101,6 +104,7 @@ class Api
      * @param string $mandateReference
      *
      * @return Resource
+     * @throws Exception
      */
     public function updatePaymentMethodWithCheckout($subscriberReference, $mandateReference)
     {
@@ -132,6 +136,7 @@ class Api
      * @param string $iban
      *
      * @return Resource
+     * @throws Exception
      */
     public function updatePaymentMethodWithIban($mandateReference, $iban)
     {
@@ -149,6 +154,7 @@ class Api
      * @param string $subscriberReference
      *
      * @return Resource
+     * @throws Exception
      */
     public function setUpCardAlias($subscriberReference)
     {
@@ -177,6 +183,7 @@ class Api
      * @param string $paymentReference
      * @param array $fields
      * @return Resource
+     * @throws Exception
      */
     public function createPayment($paymentSchema, $paymentReference, array $fields)
     {
@@ -202,6 +209,7 @@ class Api
      * @param array $fields
      *
      * @return Resource
+     * @throws Exception
      */
     public function refundPayment($paymentSchema, $mandateReference, array $fields)
     {
@@ -216,6 +224,7 @@ class Api
      * @param $paymentId
      *
      * @return Resource
+     * @throws Exception
      */
     public function getPayment($paymentId)
     {
@@ -232,6 +241,7 @@ class Api
      * @param $orderId
      *
      * @return Resource
+     * @throws Exception
      */
     public function getOrder($orderId)
     {
@@ -248,10 +258,22 @@ class Api
      * @param Resource $order
      *
      * @return Resource
+     * @throws Exception
      */
     public function getOrderPaymentReference(Resource $order, $follow)
     {
         return $this->doRequest('GET', $follow, null, $order);
+    }
+
+    /**
+     * @param Resource $mandate
+     *
+     * @return Resource
+     * @throws Exception
+     */
+    public function getOrderBankAccount(Resource $mandate, $follow)
+    {
+        return $this->doRequest('GET', $follow, null, $mandate);
     }
 
     /**
@@ -267,6 +289,7 @@ class Api
      * @param string $iframeMode
      *
      * @return string
+     * @throws Exception
      */
     public function getCheckoutIframe(Resource $order, $iframeMode)
     {
@@ -287,6 +310,8 @@ class Api
      * @param Resource $order
      *
      * @return string
+     * @throws LinkNotUniqueException
+     * @throws RelNotFoundException
      */
     public function getCheckoutRedirect(Resource $order)
     {
@@ -316,6 +341,7 @@ class Api
 
         return $this->hapiClient->sendFollow($follow, $resource);
     }
+
     /**
      * @return string
      */

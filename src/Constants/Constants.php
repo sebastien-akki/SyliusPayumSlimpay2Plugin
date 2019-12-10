@@ -47,6 +47,7 @@ class Constants
     const FOLLOW_UPDATE_BANK_ACCOUNT = 'update-bank-account';
     const FOLLOW_SEARCH_PAYMENT_BY_ID = 'search-payment-by-id';
     const FOLLOW_SEARCH_ORDER_BY_ID = 'search-order-by-id';
+    const FOLLOW_GET_BANK_ACCOUNT = 'get-bank-account';
 
     const ITEM_TYPE_SIGN_MANDATE = 'signMandate';
     const ITEM_TYPE_MANDATE = 'mandate';

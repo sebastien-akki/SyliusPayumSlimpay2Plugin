@@ -1,7 +1,10 @@
 <?php
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\GetOrderPaymentReference;
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncOrder;
 use ArrayAccess;
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
@@ -20,6 +23,7 @@ class PaymentStatusAction implements ActionInterface, GatewayAwareInterface
      * {@inheritDoc}
      *
      * @param GetStatusInterface $request
+     * @throws Exception
      */
     public function execute($request)
     {
@@ -44,6 +48,38 @@ class PaymentStatusAction implements ActionInterface, GatewayAwareInterface
                 default:
                     $request->markUnknown();
             }
+            return;
+        } else if($model['order']) {
+            $this->gateway->execute(new SyncOrder($model));
+            $order = ResourceSerializer::unserializeResource($model['order']);
+            switch ($order->getState()['state']) {
+                case Constants::ORDER_STATE_ABORT:
+                case Constants::ORDER_STATE_ABORT_BY_CLIENT:
+                    $request->markCanceled();
+                    break;
+                case Constants::ORDER_STATE_ABORT_BY_SERVER:
+                    $request->markExpired();
+                    break;
+                case Constants::ORDER_STATE_COMPLETE:
+                    $request->markCaptured();
+                    $this->gateway->execute(new GetOrderPaymentReference($model));
+                    break;
+                case Constants::ORDER_STATE_RUNNING:
+                    $request->markPending();
+                    break;
+                case Constants::ORDER_STATE_NOT_RUNNING:
+                case Constants::ORDER_STATE_NOT_RUNNING_NOT_STARTED:
+                    $request->markNew();
+                    break;
+                case Constants::ORDER_STATE_NOT_RUNNING_SUSPENDED:
+                case Constants::ORDER_STATE_NOT_RUNNING_SUSPENDED_AVAITING_INPUT:
+                case Constants::ORDER_STATE_NOT_RUNNING_SUSPENDED_AVAITING_VALIDATION:
+                    $request->markSuspended();
+                    break;
+                default:
+                    $request->markUnknown();
+            }
+            return;
         } else {
             $request->markNew();
         }

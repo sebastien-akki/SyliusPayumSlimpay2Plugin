@@ -3,6 +3,8 @@
 namespace Akki\SyliusPayumSlimpayPlugin\Action;
 
 
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncOrder;
+use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncPayment;
 use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -10,7 +12,6 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Sync;
-use Akki\SyliusPayumSlimpayPlugin\Request\Api\SyncPayment;
 
 class SyncAction implements ActionInterface, GatewayAwareInterface
 {
@@ -29,6 +30,9 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
 
         if($model['payment']) {
             $this->gateway->execute(new SyncPayment($model));
+        }
+        if($model['order']) {
+            $this->gateway->execute(new SyncOrder($model));
         }
     }
 
