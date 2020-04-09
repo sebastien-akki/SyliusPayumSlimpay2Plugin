@@ -37,13 +37,9 @@ class NotifyController extends PayumController
         $order = Resource::fromJson($body);
 
         if (strpos($order->getState()['state'], 'closed.aborted') === 0) {
-            throw new RelNotFoundException('ABORTED', array());
-
             // Return expected response
             return new Response();
         } elseif (strpos($order->getState()['state'], 'closed.completed') === 0) {
-            throw new RelNotFoundException('SUCCESS', array());
-
             // L'utilisateur a été au bout du paiement
             /** @var PaymentMethod $slimpay */
             $slimpay = $this->get('sylius.repository.payment_method')->findOneByCode('slimpay');
@@ -96,7 +92,6 @@ class NotifyController extends PayumController
             // Return expected response
             return new Response();
         }else {
-            throw new RelNotFoundException('AUTRE', array());
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
     }
