@@ -7,6 +7,7 @@ use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Exception;
+use HapiClient\Exception\RelNotFoundException;
 use HapiClient\Hal\CustomRel;
 use HapiClient\Hal\Resource;
 use HapiClient\Http\Auth\Oauth2BasicAuthentication;
@@ -35,56 +36,69 @@ class NotifyController extends PayumController
         $body = file_get_contents('php://input');
         $order = Resource::fromJson($body);
 
-        /** @var PaymentMethod $slimpay */
-        $slimpay = $this->get('sylius.repository.payment_method')->findOneByCode('slimpay');
+        if (strpos($order->getState()['state'], 'closed.aborted') === 0) {
+            throw new RelNotFoundException('ABORTED', array());
 
-        $hapiClient = $this->getHapiClient($slimpay->getGatewayConfig()->getConfig());
+            // Return expected response
+            return new Response();
+        } elseif (strpos($order->getState()['state'], 'closed.completed') === 0) {
+            throw new RelNotFoundException('SUCCESS', array());
 
-        $mandate = $this->doRequestInfosNotify($hapiClient,'get-mandate',$order);
-        $mandateSate = $mandate->getState();
-        $mandateReference = $mandateSate['reference'];
+            // L'utilisateur a été au bout du paiement
+            /** @var PaymentMethod $slimpay */
+            $slimpay = $this->get('sylius.repository.payment_method')->findOneByCode('slimpay');
 
-        // Find your payment entity
-        try {
-            /** @var EntityRepository $paymentRepository */
-            $paymentRepository = $this->get('sylius.repository.payment');
+            $hapiClient = $this->getHapiClient($slimpay->getGatewayConfig()->getConfig());
 
-            /** @var PaymentInterface $payment */
-            $payment = $paymentRepository
-                ->createQueryBuilder('p')
-                ->join('p.method', 'm')
-                ->join('m.gatewayConfig', 'gc')
-                ->where('p.details LIKE :reference')
-                ->andWhere('gc.factoryName = :factory_name')
-                ->setParameters([
-                    'reference'=>'%"mandate_reference":"'.$mandateReference.'"%',
-                    'factory_name'=>'slimpay'
-                ])
-                ->getQuery()->getSingleResult();
-        } catch (NoResultException $e) {
-            throw new NotFoundHttpException(
-                sprintf('Payments not found for this reference : "%s" !', $mandateReference),
-                $e
-            );
-        } catch (NonUniqueResultException $e) {
-            throw new NotFoundHttpException(
-                sprintf('Many payments found for this reference : "%s", only one is required !', $mandateReference),
-                $e
-            );
+            $mandate = $this->doRequestInfosNotify($hapiClient, 'get-mandate', $order);
+            $mandateSate = $mandate->getState();
+            $mandateReference = $mandateSate['reference'];
+
+            // Find your payment entity
+            try {
+                /** @var EntityRepository $paymentRepository */
+                $paymentRepository = $this->get('sylius.repository.payment');
+
+                /** @var PaymentInterface $payment */
+                $payment = $paymentRepository
+                    ->createQueryBuilder('p')
+                    ->join('p.method', 'm')
+                    ->join('m.gatewayConfig', 'gc')
+                    ->where('p.details LIKE :reference')
+                    ->andWhere('gc.factoryName = :factory_name')
+                    ->setParameters([
+                        'reference' => '%"mandate_reference":"' . $mandateReference . '"%',
+                        'factory_name' => 'slimpay'
+                    ])
+                    ->getQuery()->getSingleResult();
+            } catch (NoResultException $e) {
+                throw new NotFoundHttpException(
+                    sprintf('Payments not found for this reference : "%s" !', $mandateReference),
+                    $e
+                );
+            } catch (NonUniqueResultException $e) {
+                throw new NotFoundHttpException(
+                    sprintf('Many payments found for this reference : "%s", only one is required !', $mandateReference),
+                    $e
+                );
+            }
+
+            /** @var PaymentMethodInterface $payment_method */
+            $payment_method = $payment->getMethod();
+
+            $gateway_name = $payment_method->getGatewayConfig()->getGatewayName();
+
+            // Execute notify & status actions.
+            $gateway = $this->getPayum()->getGateway($gateway_name);
+
+            $gateway->execute(new Notify($payment));
+
+            // Return expected response
+            return new Response();
+        }else {
+            throw new RelNotFoundException('AUTRE', array());
+            return new Response('', Response::HTTP_BAD_REQUEST);
         }
-
-        /** @var PaymentMethodInterface $payment_method */
-        $payment_method = $payment->getMethod();
-
-        $gateway_name = $payment_method->getGatewayConfig()->getGatewayName();
-
-        // Execute notify & status actions.
-        $gateway = $this->getPayum()->getGateway($gateway_name);
-
-        $gateway->execute(new Notify($payment));
-
-        // Return expected response
-        return new Response();
     }
 
     private function getHapiClient(array $config) {
