@@ -60,7 +60,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['first_name'] = $address->getFirstName();
             $model['last_name'] = $address->getLastName();
             $model['address1'] = $address->getStreet();
-            $model['address2'] = $address->getStreetComplement() !== null ? $address->getStreetComplement() : '';
+            $model['address2'] = $address->getCompany() ?? '';
             $model['city'] = $address->getCity();
             $model['zip'] = $address->getPostcode();
             $model['country'] = $address->getCountryCode();
@@ -76,7 +76,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
     {
         return $request instanceof Convert
             && $request->getSource() instanceof PaymentInterface
-            && $request->getTo() == 'array';
+            && $request->getTo() === 'array';
     }
 
     /**
