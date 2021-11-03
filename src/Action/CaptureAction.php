@@ -29,7 +29,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         if ($request->getToken()) {
-            $model['return_url'] = $request->getToken()->getAfterUrl();
+            $model['return_url'] = $model['forced_url'] ?? $request->getToken()->getAfterUrl();
         }
 
         if ($model['type_paiement'] !== 'mandat'){

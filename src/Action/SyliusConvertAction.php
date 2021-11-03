@@ -66,6 +66,8 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['country'] = $address->getCountryCode();
         }
 
+        $model['forced_url'] = $order->getForcedUrl();
+
         $request->setResult((array)$model);
     }
 
