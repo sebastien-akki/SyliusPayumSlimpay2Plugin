@@ -36,7 +36,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
 
         $model = ArrayObject::ensureArrayObject($payment->getDetails());
 
-        $model['type_paiement'] = 'mandat';
+        $model['type_paiement'] = 'prelevement';
 
         if (false == $model['payment_reference']) {
             $this->setReference($model, $payment);
