@@ -51,6 +51,10 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
         }
 
         $order = $payment->getOrder();
+
+        $model['amount'] = $order->getTotal()/100;
+        $model['currency'] = $payment->getCurrencyCode();
+
         if (null !== $customer = $order->getCustomer()) {
             $model['subscriber_reference'] = $customer->getId();
             $model['email'] = $customer->getEmail();
