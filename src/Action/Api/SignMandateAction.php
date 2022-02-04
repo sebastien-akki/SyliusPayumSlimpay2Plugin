@@ -52,25 +52,29 @@ class SignMandateAction extends BaseApiAwareAction
         $model->validateNotEmpty(['checkout_mode']);
 
         $model['order'] = ResourceSerializer::serializeResource(
-            $this->api->signMandate($model['subscriber_reference'],
-            $model['payment_scheme'],
-            [
-                'givenName' => $model['first_name'],
-                'familyName' => $model['last_name'],
-                'email' => $model['email'],
-                'telephone' => $model['phone'],
-                'companyName' => $model['company'],
-                'organizationName' => $model['organization'],
-                'billingAddress' => [
-                    'street1' => $model['address1'],
-                    'street2' => $model['address2'],
-                    'city' => $model['city'],
-                    'postalCode' => $model['zip'],
-                    'country' => $model['country']
-                ]
-            ],
+            $this->api->signMandate(
+                $model['subscriber_reference'],
+                $model['payment_scheme'],
+                [
+                    'givenName' => $model['first_name'],
+                    'familyName' => $model['last_name'],
+                    'email' => $model['email'],
+                    'telephone' => $model['phone'],
+                    'companyName' => $model['company'],
+                    'organizationName' => $model['organization'],
+                    'billingAddress' => [
+                        'street1' => $model['address1'],
+                        'street2' => $model['address2'],
+                        'city' => $model['city'],
+                        'postalCode' => $model['zip'],
+                        'country' => $model['country']
+                    ]
+                ],
                 $model['return_url'],
-                $model['mandate_reference'])
+                $model['mandate_reference'],
+                $model['amount'],
+                $model['currency']
+            )
         );
 
         if(Constants::CHECKOUT_MODE_REDIRECT == $model['checkout_mode']) {

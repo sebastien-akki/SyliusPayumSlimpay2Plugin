@@ -68,10 +68,12 @@ class Api
      *
      * @param string $returnUrl
      * @param string $mandateReference
+     * @param int $amount
+     * @param string $currency
      * @return Resource
      * @throws Exception
      */
-    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $mandateReference)
+    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $mandateReference, int $amount = 0, string $currency = '')
     {
         $fields = [
             'started' => true,
@@ -95,6 +97,22 @@ class Api
                 ]
             ]
         ];
+
+        if ($amount > 0)
+        {
+            $fields['items'][] = [
+                'type' => Constants::ITEM_TYPE_PAYMENT,
+                'action' => Constants::ITEM_ACTION_CREATE,
+                'payin' => [
+                    'reference' => "${mandateReference}_PREL",
+                    'amount' => $amount/100,
+                    'currency' => $currency,
+                    'scheme' => null,
+                    'label' => 'Premier prélèvement',
+                    'executionDate' => null
+                ]
+            ];
+        }
 
         return $this->doRequest('POST', Constants::FOLLOW_CREATE_ORDERS, $fields);
     }
