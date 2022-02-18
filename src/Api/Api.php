@@ -67,17 +67,17 @@ class Api
      * @param array $mandateFields
      *
      * @param string $returnUrl
+     * @param string $cancelUrl
      * @param string $mandateReference
      * @return Resource
      * @throws Exception
      */
-    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $mandateReference)
+    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $cancelUrl = '', string $mandateReference)
     {
         $fields = [
             'started' => true,
             'locale' => null,
             'paymentScheme' => $paymentSchema,
-            'returnUrl' => $returnUrl,
             'creditor' => [
                 'reference' => $this->options['creditor_reference']
             ],
@@ -95,6 +95,15 @@ class Api
                 ]
             ]
         ];
+
+        if ($cancelUrl === '')
+        {
+            $fields['returnUrl'] = $returnUrl;
+        } else {
+            $fields['failureUrl'] = $cancelUrl;
+            $fields['successUrl'] = $returnUrl;
+            $fields['cancelUrl'] = $cancelUrl;
+        }
 
         return $this->doRequest('POST', Constants::FOLLOW_CREATE_ORDERS, $fields);
     }

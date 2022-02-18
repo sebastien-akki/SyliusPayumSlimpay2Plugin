@@ -70,6 +70,7 @@ class SignMandateAction extends BaseApiAwareAction
                 ]
             ],
                 $model['return_url'],
+                $model['cancel_url'],
                 $model['mandate_reference'])
         );
 

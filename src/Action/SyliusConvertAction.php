@@ -66,6 +66,8 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
             $model['country'] = $address->getCountryCode();
         }
 
+        $model['cancel_url'] = $order->getCancelUrl() !== null && !empty($order->getCancelUrl()) ? $order->getCancelUrl() : '';
+
         $request->setResult((array)$model);
     }
 
