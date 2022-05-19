@@ -4,11 +4,10 @@ namespace Akki\SyliusPayumSlimpayPlugin\Action\Api;
 
 use ArrayAccess;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Akki\SyliusPayumSlimpayPlugin\Constants\Constants;
-use Akki\SyliusPayumSlimpayPlugin\Request\Api\Refund;
 use Akki\SyliusPayumSlimpayPlugin\Util\ResourceSerializer;
+use Payum\Core\Request\Refund;
 
 class RefundAction extends BaseApiAwareAction
 {
@@ -24,24 +23,23 @@ class RefundAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(['amount', 'currency', 'payment_scheme', 'mandate_reference']);
+        $model->validateNotEmpty( ['payment_scheme', 'mandate_reference']);
 
-        if (Constants::PAYMENT_SCHEME_SEPA_CREDIT_TRANSFER != $model['payment_scheme']) {
-            throw new LogicException(sprintf(
-                'Only %s payment scheme is supported',
-                Constants::PAYMENT_SCHEME_SEPA_CREDIT_TRANSFER
-            ));
-        }
+        $amount = $request->getFirstModel()->getAmount();
+        $currency = $request->getFirstModel()->getCurrencyCode();
+        $number = $request->getFirstModel()->getOrder()->getNumber();
+
+        $fields = [
+            'reference' => "Refund KiosqueMag N°$number",
+            'amount' => $amount,
+            'currency' => $currency,
+            'scheme' => Constants::PAYMENT_SCHEME_SEPA_CREDIT_TRANSFER,
+            'label' => $model['label'],
+            'executionDate' => $model['execution_date']
+        ];
 
         $model['payment'] = ResourceSerializer::serializeResource(
-            $this->api->refundPayment($model['payment_scheme'], $model['mandate_reference'], [
-                'reference' => $model['reference'],
-                'amount' => $model['amount'],
-                'currency' => $model['currency'],
-                'scheme' => $model['payment_scheme'],
-                'label' => $model['label'],
-                'executionDate' => $model['execution_date']
-            ])
+            $this->api->refundPayment(Constants::PAYMENT_SCHEME_SEPA_CREDIT_TRANSFER, $model['mandate_reference'], $fields)
         );
     }
 
@@ -53,6 +51,6 @@ class RefundAction extends BaseApiAwareAction
         return
             $request instanceof Refund &&
             $request->getModel() instanceof ArrayAccess
-        ;
+            ;
     }
 }
