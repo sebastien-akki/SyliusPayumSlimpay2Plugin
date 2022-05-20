@@ -89,8 +89,10 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
     protected function setReference(ArrayObject $model, PaymentInterface $payment): void
     {
         $dateNow = new Datetime("now");
+        $mandateReference = "{$payment->getId()}_{$dateNow->format('Y_m_d_H_i_s')}";
+        $payment->setMandateReference($mandateReference);
         $model['payment_reference'] = $payment->getId();
-        $model['mandate_reference'] = "{$payment->getId()}_{$dateNow->format('Y_m_d_H_i_s')}";
+        $model['mandate_reference'] = $mandateReference;
     }
 
     /**
