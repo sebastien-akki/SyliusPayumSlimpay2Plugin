@@ -60,10 +60,10 @@ class NotifyController extends PayumController
                     ->createQueryBuilder('p')
                     ->join('p.method', 'm')
                     ->join('m.gatewayConfig', 'gc')
-                    ->where('p.details LIKE :reference')
+                    ->where('p.mandateReference = :reference')
                     ->andWhere('gc.factoryName = :factory_name')
                     ->setParameters([
-                        'reference' => '%"mandate_reference":"' . $mandateReference . '"%',
+                        'reference' => $mandateReference,
                         'factory_name' => 'slimpay'
                     ])
                     ->getQuery()->getSingleResult();
