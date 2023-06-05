@@ -71,7 +71,6 @@ class SignMandateAction extends BaseApiAwareAction
                     ]
                 ],
                 $model['return_url'],
-                $model['mandate_reference'],
                 $model['amount'],
                 $model['currency']
             )

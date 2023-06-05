@@ -67,13 +67,14 @@ class Api
      * @param array $mandateFields
      *
      * @param string $returnUrl
-     * @param string $mandateReference
      * @param int $amount
      * @param string $currency
+     * @param string|null $mandateReference
+     *
      * @return Resource
      * @throws Exception
      */
-    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, string $mandateReference, int $amount = 0, string $currency = '')
+    public function signMandate($subscriberReference, $paymentSchema, array $mandateFields, string $returnUrl, int $amount = 0, string $currency = '', ?string $mandateReference = null)
     {
         $fields = [
             'started' => true,
@@ -91,7 +92,7 @@ class Api
                     'type' => Constants::ITEM_TYPE_SIGN_MANDATE,
                     'action' => Constants::ITEM_ACTION_SIGN,
                     'mandate' => [
-                        'reference' => $mandateReference,
+//                        'reference' => $mandateReference,
                         'signatory' => $mandateFields
                     ]
                 ]
