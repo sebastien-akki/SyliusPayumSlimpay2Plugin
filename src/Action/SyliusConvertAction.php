@@ -92,7 +92,7 @@ class SyliusConvertAction implements ActionInterface, GatewayAwareInterface
     {
         $dateNow = new Datetime("now");
         $model['payment_reference'] = $payment->getId();
-        $model['mandate_reference'] = "{$payment->getId()}_{$dateNow->format('Y_m_d_H_i_s')}";
+        // $model['mandate_reference'] = "{$payment->getId()}_{$dateNow->format('Y_m_d_H_i_s')}";
     }
 
     /**
